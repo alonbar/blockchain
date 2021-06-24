@@ -5,7 +5,7 @@ class DBWrapper:
     def __init__(self) -> None:
         print('create DB Wrapper')
         self._campigns = []
-        self.CAMPIGNS_FOLDER = 'campigns'
+        self.CAMPIGNS_FOLDER = 'campaigns'
         directory = self.CAMPIGNS_FOLDER
         #read all campigns
         if not os.path.exists(self.CAMPIGNS_FOLDER):
@@ -21,11 +21,11 @@ class DBWrapper:
                 continue
         #read all json files of ready campigns
     def addNewCampign(self,campignData) -> bool:
-        campignName = campignData['name']
+        campignName = campignData['address']
         #if (campignName in self._campigns):
         #    return False
-        self._campigns[campignName] = campignData
-        with open(campignName + '.json', 'w') as outfile:
+        self._campigns.append(campignData)
+        with open(self.CAMPIGNS_FOLDER + '/' +campignName + '.json', 'w') as outfile:
             json.dump(campignData, outfile)
         return True
     def getAllCampigns(self) -> List:
