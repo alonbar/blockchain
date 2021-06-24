@@ -11,6 +11,7 @@ class App extends Component {
     this.web3 = new Web3(window.web3.currentProvider);
 
     this.handleDonateClick = this.handleDonateClick.bind(this);
+    this.handleDonationSizeChange = this.handleDonationSizeChange(this)
 
   }
   componentWillMount() {
@@ -22,57 +23,71 @@ class App extends Component {
     }
   }
 
+  handleDonationSizeChange(text) {
+    console.log(text)
+  }
+
   handleDonateClick() {
     // this.web3 = new Web3(window.web3.currentProvider);
-    const contractAddress = '0xdAe45773E3213ECFE73401AF4906F23d4Aa06348'
+    const contractAddress = '0x87D45fD0FCD430bf1c0a2d6a596C83B74df814A4'
 
     const abi = [
       {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "relativeVestingTime",
-            "type": "uint256"
-          }
-        ],
-        "stateMutability": "payable",
-        "type": "constructor"
-      },
-      {
+        "constant": false,
         "inputs": [],
-        "name": "contribute",
+        "name": "pledge",
         "outputs": [],
+        "payable": true,
         "stateMutability": "payable",
         "type": "function"
       },
       {
-        "inputs": [
-          {
-            "internalType": "address payable",
-            "name": "target",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "withdraw",
+        "constant": false,
+        "inputs": [],
+        "name": "claimFunds",
         "outputs": [],
+        "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "getRefund",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "name": "numberOfDays",
+            "type": "uint256"
+          },
+          {
+            "name": "_goal",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
       }
     ]
 
-    let myContract = new this.web3.eth.Contract(abi, contractAddress);
+    let myContract = new this.web3.eth.Contract(abi, this.state.contractAddress);
 
-    const amount = 1000000000000000000
+    // const amount = 1000000000000000000
+    // const amount2 = 10000
+
+    console.log('contract address: ', this.state.contractAddress)
+    console.log('donation size: ', this.state.donationSize)
     this.web3.eth.getAccounts().then((accounts) => {
       console.log('accounts: ', accounts[0])
-      myContract.methods.contribute().send({
+      myContract.methods.pledge().send({
         from: accounts[0],
-        value: amount
+        value: this.state.donationSize
       }).then((contributeRes) => {
         console.log('aaa')
         console.log('res', contributeRes)
@@ -80,20 +95,6 @@ class App extends Component {
     })
 
   // console.log("response: ", response);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     this.setState(prevState => ({
@@ -111,9 +112,25 @@ class App extends Component {
 
         <h2>Donate Money:</h2><br/>
 
+
+        Donation size
+        <input  onChange={(e) => {
+          this.state.donationSize = Number(e.target.value)
+          console.log('donation size: ', this.state.donationSize)
+          }}/>
+
+         <br/>
+         
+        Address
+        <input  onChange={(e) => {
+          this.state.contractAddress = e.target.value
+          console.log('contract address: ', this.state.contractAddress)
+          }}/>
+         <br/>
+         
+
         <button onClick={this.handleDonateClick}>
           Donate money
-          {this.state.isToggleOn ? 'ON' : 'OFF'}
         </button>
       </div>
       
