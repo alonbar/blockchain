@@ -12,6 +12,7 @@ def getCampigns():
     #return array of jsons of campigns
     return jsonify(db.getAllCampigns())
 @app.route('/startNewCampign', methods=['POST'])
+@cross_origin()
 def startNewCampign():
     data = request.json
     print(data)
