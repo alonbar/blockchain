@@ -11,7 +11,7 @@ contract Crowdfunding {
         addresses = _addresses;
     }
     function verify(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s, address _address) constant returns(bool) {
-        return ecrecover(prefixedHash, v, r, s) == (_address);
+        return ecrecover(msgHash, v, r, s) == (_address);
     }
     function pledge() public payable {
         require(now < deadline,"deadline not reached");
