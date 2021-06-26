@@ -1,4 +1,7 @@
 # blockchain
+Architecture overview:
+
+![plot](./architecture.png)
 
 Installation:
 
