@@ -5,24 +5,44 @@ contract Crowdfunding {
     uint256 deadline;
     uint256 goal;
     mapping(address => uint256) pledgeOf;
-    
-    constructor(uint256 numberOfSeconds, uint256 _goal) public {
+    address[3] addresses;
+    constructor(uint256 numberOfSeconds, uint256 _goal,address[3] _addresses) public {
         owner = msg.sender;
         deadline = now + (numberOfSeconds * 1 seconds);
         goal = _goal;
+        addresses = _addresses;
     }
-
+    function verify(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s, address _address) constant returns(bool) {
+        bytes memory prefix = "\x19Ethereum Signed Message:\n32";
+        bytes32 prefixedHash = keccak256(prefix, msgHash);
+        return ecrecover(prefixedHash, v, r, s) == (_address);
+    }
     function pledge() public payable {
         require(now < deadline);
         pledgeOf[msg.sender] += msg.value;
     }
 
-    function claimFunds() public {
+    function claimFunds(bytes32[2] _msgHash, uint8[2] _v, bytes32[2] _r, bytes32[2] _s) public {
         //todo, add two keys
         require(address(this).balance >= goal); // funding goal met
         require(now >= deadline);               // in the withdrawal period
         require(msg.sender == owner);
         msg.sender.transfer(address(this).balance);
+        uint8 counter = 0;
+        for (uint8 i =0; i<2; i++)
+        {
+            for (uint8 j=0;j < 3; j++)
+            {
+                if (verify(_msgHash[i], _v[i], _r[i], _s[i], addresses[j]) == true)
+                {
+                    counter++;
+                }
+            }
+        }
+        if (counter > 0)
+        {
+            msg.sender.transfer(address(this).balance);
+        }
     }
 
     function getRefund() public {
