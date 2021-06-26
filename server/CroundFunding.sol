@@ -11,7 +11,7 @@ contract Crowdfunding {
         addresses = _addresses;
     }
     function verify(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s, address _address) constant returns(bool) {
-        bytes memory prefix = "\x19Ethereum Signed Message:\n32";
+        //bytes memory prefix = "\x19Ethereum Signed Message:\n32";
         bytes32 prefixedHash = keccak256(prefix, msgHash);
         return ecrecover(prefixedHash, v, r, s) == (_address);
     }
@@ -31,15 +31,13 @@ contract Crowdfunding {
             {
                 if (verify(_msgHash[i], _v[i], _r[i], _s[i], addresses[j]) == true)
                 {
-                    console.log("verified: ", addresses[j])
+                    console.log("verified: ", addresses[j]);
                     counter++;
                 }
             }
         }
-        if (counter > 1)
-        {
-            msg.sender.transfer(address(this).balance);
-        }
+        require(counter > 1, "did not get enough correct signatures");
+        msg.sender.transfer(address(this).balance);
     }
 
     function getRefund() public {
