@@ -18,7 +18,7 @@ contract Crowdfunding {
         pledgeOf[msg.sender] += msg.value;
     }
 
-    function claimFunds(bytes32[2] _msgHash, uint8[2] _v, bytes32[2] _r, bytes32[2] _s) public {
+    function claimFunds(bytes32 _msgHash, uint8[2] _v, bytes32[2] _r, bytes32[2] _s) public {
         //todo, add two keys
         require(address(this).balance >= goal, "goal not reached"); // funding goal met
         require(now >= deadline, "deadline not reached");               // in the withdrawal period

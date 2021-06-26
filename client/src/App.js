@@ -16,6 +16,32 @@ const abi = [
 	{
 		"constant": false,
 		"inputs": [],
+		"name": "getRefund",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_msgHash",
+				"type": "bytes32"
+			},
+			{
+				"name": "_v",
+				"type": "uint8[2]"
+			},
+			{
+				"name": "_r",
+				"type": "bytes32[2]"
+			},
+			{
+				"name": "_s",
+				"type": "bytes32[2]"
+			}
+		],
 		"name": "claimFunds",
 		"outputs": [],
 		"payable": false,
@@ -24,9 +50,35 @@ const abi = [
 	},
 	{
 		"constant": false,
-		"inputs": [],
-		"name": "getRefund",
-		"outputs": [],
+		"inputs": [
+			{
+				"name": "msgHash",
+				"type": "bytes32"
+			},
+			{
+				"name": "v",
+				"type": "uint8"
+			},
+			{
+				"name": "r",
+				"type": "bytes32"
+			},
+			{
+				"name": "s",
+				"type": "bytes32"
+			},
+			{
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "verify",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -40,6 +92,10 @@ const abi = [
 			{
 				"name": "_goal",
 				"type": "uint256"
+			},
+			{
+				"name": "_addresses",
+				"type": "address[3]"
 			}
 		],
 		"payable": false,
@@ -48,7 +104,7 @@ const abi = [
 	}
 ]
 
-const rawByteCode = "0x608060405234801561001057600080fd5b506040516040806103bf8339810180604052810190808051906020019092919080519060200190929190505050336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060018202420160018190555080600281905550505061031e806100a16000396000f300608060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806388ffe8671461005c578063ac30777314610066578063b2d5ae441461007d575b600080fd5b610064610094565b005b34801561007257600080fd5b5061007b6100f3565b005b34801561008957600080fd5b506100926101e7565b005b600154421015156100a457600080fd5b34600360003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540192505081905550565b6002543073ffffffffffffffffffffffffffffffffffffffff16311015151561011b57600080fd5b600154421015151561012c57600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561018757600080fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc3073ffffffffffffffffffffffffffffffffffffffff16319081150290604051600060405180830381858888f193505050501580156101e4573d6000803e3d6000fd5b50565b60006002543073ffffffffffffffffffffffffffffffffffffffff163110151561021057600080fd5b600154421015151561022157600080fd5b600360003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490506000600360003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055503373ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f193505050501580156102ee573d6000803e3d6000fd5b50505600a165627a7a723058209ece3759ac85718835c241bd6f36d6db2e1b27c2a95b60172dc6ef094aecddc50029"
+const rawByteCode = "0x608060405234801561001057600080fd5b5060405160a080610a068339810180604052810190808051906020019092919080519060200190929190919050506001830242016000819055508160018190555080600390600361006292919061006b565b5050505061012b565b82600381019282156100d7579160200282015b828111156100d65782518260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055509160200191906001019061007e565b5b5090506100e491906100e8565b5090565b61012891905b8082111561012457600081816101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055506001016100ee565b5090565b90565b6108cc8061013a6000396000f300608060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806388ffe86714610067578063b2d5ae4414610071578063cb90ff4b14610088578063cc7d675c14610146575b600080fd5b61006f6101d8565b005b34801561007d57600080fd5b506100866102a0565b005b34801561009457600080fd5b5061014460048036038101908080356000191690602001909291908060400190600280602002604051908101604052809291908260026020028082843782019150505050509192919290806040019060028060200260405190810160405280929190826002602002808284378201915050505050919291929080604001906002806020026040519081016040528092919082600260200280828437820191505050505091929192905050506104a3565b005b34801561015257600080fd5b506101be6004803603810190808035600019169060200190929190803560ff16906020019092919080356000191690602001909291908035600019169060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506107e4565b604051808215151515815260200191505060405180910390f35b60005442101515610251576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260148152602001807f646561646c696e65206e6f74207265616368656400000000000000000000000081525060200191505060405180910390fd5b34600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540192505081905550565b60006001543073ffffffffffffffffffffffffffffffffffffffff1631101515610358576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260298152602001807f66756e64696e672072656163686564206c696d69742c2063616e206e6f74206781526020017f657420726566756e64000000000000000000000000000000000000000000000081525060400191505060405180910390fd5b60005442101515156103d2576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260148152602001807f646561646c696e65206e6f74207265616368656400000000000000000000000081525060200191505060405180910390fd5b600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490506000600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055503373ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f1935050505015801561049f573d6000803e3d6000fd5b5050565b60008060006001543073ffffffffffffffffffffffffffffffffffffffff163110151515610539576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260108152602001807f676f616c206e6f7420726561636865640000000000000000000000000000000081525060200191505060405180910390fd5b60005442101515156105b3576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260148152602001807f646561646c696e65206e6f74207265616368656400000000000000000000000081525060200191505060405180910390fd5b60009250600091505b60028260ff1610156106dc57600090505b60038160ff1610156106cf57600115156106b1888460ff166020811015156105f157fe5b1a7f0100000000000000000000000000000000000000000000000000000000000000027effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916888560ff1660028110151561064757fe5b6020020151888660ff1660028110151561065d57fe5b6020020151888760ff1660028110151561067357fe5b602002015160038760ff1660038110151561068a57fe5b0160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff166107e4565b151514156106c25782806001019350505b80806001019150506105cd565b81806001019250506105bc565b60018360ff1611151561077d576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260258152602001807f646964206e6f742067657420656e6f75676820636f7272656374207369676e6181526020017f747572657300000000000000000000000000000000000000000000000000000081525060400191505060405180910390fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc3073ffffffffffffffffffffffffffffffffffffffff16319081150290604051600060405180830381858888f193505050501580156107da573d6000803e3d6000fd5b5050505050505050565b60008173ffffffffffffffffffffffffffffffffffffffff16600187878787604051600081526020016040526040518085600019166000191681526020018460ff1660ff1681526020018360001916600019168152602001826000191660001916815260200194505050505060206040516020810390808403906000865af1158015610874573d6000803e3d6000fd5b5050506020604051035173ffffffffffffffffffffffffffffffffffffffff16149050959450505050505600a165627a7a72305820f7ceb9ce0907321b1b51d8736dc0c0e564d508cd836969673aae0c9ebaf01be10029"
     
 
 class App extends Component {
@@ -62,6 +118,7 @@ class App extends Component {
     this.deployCampaginToBlockChain = this.deployCampaginToBlockChain.bind(this);
     this.refundNow = this.refundNow.bind(this)
     this.signConstantMessage = this.signConstantMessage.bind(this)
+    this.withdraw = this.withdraw.bind(this)
   }
 
   componentWillMount() {
@@ -78,6 +135,41 @@ class App extends Component {
       })
     }
   }
+
+  withdraw() {
+
+    console.log('here333')
+    let myContract = new this.web3.eth.Contract(abi, this.state.contractAddress);
+    console.log('withdraw now', this.state.contractAddress)
+    
+    const message = "WITHDRAW!";
+    const messageHash= this.web3.eth.accounts.hashMessage(message);
+
+    const vs = [this.state.v1, this.state.v2]
+    const rs = [this.state.r1, this.state.r2]
+    const ss = [this.state.s1, this.state.s2]
+  
+    console.log('my accounts: ', this.state.account)
+    myContract.methods.claimFunds(messageHash, vs, rs, ss).send({
+      from: this.state.account
+    }).then((claimFundsRes) => {
+      
+      console.log('donation returned: ', claimFundsRes)
+      this.web3.eth.getBalance(this.state.contractAddress).then(balance => 
+      {
+        console.log('balance returned: ', balance)
+        this.state.balance = balance;
+        this.setState(({}));
+      });
+      
+    });
+
+
+  this.state.balance = null;
+  this.setState(({}));
+    
+  }
+
 
   refundNow() {
     let myContract = new this.web3.eth.Contract(abi, this.state.contractAddress);
@@ -106,7 +198,8 @@ class App extends Component {
   deployCampaginToBlockChain(){
     
     let SampleContract = new this.web3.eth.Contract(abi);
-    SampleContract.deploy({from: this.state.account, gas: 1000000, data: rawByteCode, arguments: [this.state.relativeTimeSeconds, this.state.goal]})
+    const pks = [this.state.publicKey1, this.state.publicKey2, this.state.publicKey3]
+    SampleContract.deploy({from: this.state.account, gas: 1000000, data: rawByteCode, arguments: [this.state.relativeTimeSeconds, this.state.goal, pks]})
     .send({from: this.state.account})
     .then(response => {
       console.log('response deploy: ', response)
@@ -169,36 +262,23 @@ class App extends Component {
   }
 
   signConstantMessage() {
-    var message = "WITHDRAW! ";
+    const message = "WITHDRAW!";
       
-    var signature = this.web3.eth.accounts.sign(message, '0xb44e82c13345b6c41d413b3198da1d502bc04a4d823a168fe6ad86919143de86');
+    const signature1 = this.web3.eth.accounts.sign(message, this.state.private_key1);
+    const signature2 = this.web3.eth.accounts.sign(message, this.state.private_key2);
     
-    console.log("signature :", signature);
-    
-    var messageHash= this.web3.eth.accounts.hashMessage(message);
-    // recover 1
-    
-    
-    
-    var recover_1 = this.web3.eth.accounts.recover({
-        messageHash: messageHash,
-        v: signature.v,
-        r: signature.r,
-        s: signature.s
-    });
-    
-    console.log("recover 1 :", recover_1);
-    
-    
-    // message, signature
-    var recover_2 = this.web3.eth.accounts.recover(message, signature.signature);
-    console.log("recover 2 :", recover_2);
-    
-    // message, v, r, s
-    var recover_3 = this.web3.eth.accounts.recover(message, signature.v, signature.r, signature.s);
-    console.log("recover 3 :", recover_3);
-    
-    console.log(Object.assign(signature, {v: this.web3.utils.toDecimal(signature.v)}));
+    console.log("signature1 :", signature1);
+    console.log("signature2 :", signature2);
+
+
+    this.state.r1_from_test = signature1.r;
+    this.state.v1_from_test = signature1.v;
+    this.state.s1_from_test = signature1.s;
+
+    this.state.r2_from_test = signature2.r;
+    this.state.v2_from_test = signature2.v;
+    this.state.s2_from_test = signature2.s;  
+    this.setState(({}));
         
   }
 
@@ -296,9 +376,83 @@ class App extends Component {
         </button>
         {'   '}Contract balance after refund:{' '} {this.state.balance}
 
+        <br/><br/>
+        <h2>WITHDRAW:</h2>
+        Address
+        <input onChange={(e) => {
+          this.state.contractAddress = e.target.value
+          console.log('contract address: ', this.state.contractAddress)
+          }}/>
+        <br/>
+
+        r1
+        <input onChange={(e) => {
+          this.state.r1 = e.target.value
+          }}/>
+        <br/>
+        
+        s1
+        <input onChange={(e) => {
+          this.state.s1 = e.target.value
+          }}/>  
+        <br/>
+          
+        v1
+        <input onChange={(e) => {
+          this.state.v1 = e.target.value
+          }}/>  
+        <br/>
+        r2
+        <input onChange={(e) => {
+          this.state.r2 = e.target.value
+          }}/>
+        <br/>
+        s2
+        <input onChange={(e) => {
+          this.state.s2 = e.target.value
+          }}/>  
+        <br/> 
+        v2
+        <input onChange={(e) => {
+          this.state.v2 = e.target.value
+          }}/>          
+        <br/>
+        <button onClick={this.withdraw}>
+        WITHDRAW
+        </button>
+        {'   '}Contract balance after refund:{' '} {this.state.balance}
+
 
       <br/><br/>
-      <h2>sign constant message:</h2>
+      <h2>test withdraw:</h2> <br/>for dev reasons<br/>
+      This acts as if you are passing the values of v,r,s (the seperation of the signature to three parts via some communication that is not ethereum and blockchain )
+      <br/>
+      test private key1 (without leading 0x)
+        <input onChange={(e) => {
+          this.state.private_key1 = e.target.value
+          }}/>  
+        <br/>
+     
+          
+        test private key2 (without leading 0x)
+        <input onChange={(e) => {
+          this.state.private_key2 = e.target.value
+          }}/>  
+        <br/>
+        <br/>
+        {'r1: '} {this.state.r1_from_test}
+        <br/>
+        {'rs: '} {this.state.s1_from_test}
+        <br/>
+        {'v1: '} {this.web3.utils.toDecimal(this.state.v1_from_test)}
+        <br/>
+        {'r2: '} {this.state.r2_from_test}
+        <br/>
+        {'s2: '} {this.state.s2_from_test}
+        <br/>
+        {'v2: '} {this.web3.utils.toDecimal(this.state.v2_from_test)}
+
+        <br/>
 
       <button onClick={this.signConstantMessage}>
       sign constant messag
