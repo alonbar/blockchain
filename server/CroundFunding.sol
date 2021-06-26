@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity ^0.4.19;
 
 contract Crowdfunding {
     uint256 deadline;
@@ -10,7 +10,7 @@ contract Crowdfunding {
         goal = _goal;
         addresses = _addresses;
     }
-    function verify(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s, address _address) constant returns(bool) {
+    function verify(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s, address _address) returns(bool) {
         return ecrecover(msgHash, v, r, s) == (_address);
     }
     function pledge() public payable {
@@ -29,7 +29,7 @@ contract Crowdfunding {
             {
                 if (verify(_msgHash[i], _v[i], _r[i], _s[i], addresses[j]) == true)
                 {
-                    console.log("verified: ", addresses[j]);
+                    //console.log("verified: ", addresses[j]);
                     counter++;
                 }
             }
