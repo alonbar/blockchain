@@ -5,15 +5,16 @@ class DBWrapper:
     def __init__(self) -> None:
         print('create DB Wrapper')
         self._campigns = []
-        self.CAMPIGNS_FOLDER = 'campaigns'
+        self.CAMPIGNS_FOLDER = './campaigns'
         directory = self.CAMPIGNS_FOLDER
         #read all campigns
         if not os.path.exists(self.CAMPIGNS_FOLDER):
             os.makedirs(self.CAMPIGNS_FOLDER)
         for filename in os.listdir(directory):
             if filename.endswith(".json"):
-                print(os.path.join(directory, filename))
-                f = open(filename,)
+                fullpath = os.path.join(directory, filename)
+                print(fullpath)
+                f = open(fullpath,)
                 data = json.loads(f.read())
                 f.close()
                 self._campigns.append(data)
