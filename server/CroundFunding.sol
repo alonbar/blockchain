@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.5.1;
 
 contract Crowdfunding {
     uint256 deadline;
@@ -24,7 +24,6 @@ contract Crowdfunding {
         //todo, add two keys
         require(address(this).balance >= goal, "goal not reached"); // funding goal met
         require(now >= deadline, "deadline not reached");               // in the withdrawal period
-        msg.sender.transfer(address(this).balance);
         uint8 counter = 0;
         for (uint8 i =0; i<2; i++)
         {
@@ -32,6 +31,7 @@ contract Crowdfunding {
             {
                 if (verify(_msgHash[i], _v[i], _r[i], _s[i], addresses[j]) == true)
                 {
+                    console.log("verified: ", addresses[j])
                     counter++;
                 }
             }
