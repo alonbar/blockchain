@@ -5,10 +5,12 @@ contract Crowdfunding {
     uint256 goal;
     mapping(address => uint256) pledgeOf;
     address[3] addresses;
+    bool moneyClaimed;
     constructor(uint256 numberOfSeconds, uint256 _goal,address[3] _addresses) public {
         deadline = now + (numberOfSeconds * 1 seconds);
         goal = _goal;
         addresses = _addresses;
+        moneyClaimed = false;
     }
     function verify(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s, address _address) returns(bool) {
         return ecrecover(msgHash, v, r, s) == (_address);
@@ -19,7 +21,7 @@ contract Crowdfunding {
     }
 
     function claimFunds(bytes32 _msgHash, uint8[2] _v, bytes32[2] _r, bytes32[2] _s) public {
-        //todo, add two keys
+        require(!moneyClaimed, "money was already claimed");
         require(address(this).balance >= goal, "goal not reached"); // funding goal met
         require(now >= deadline, "deadline not reached");               // in the withdrawal period
         uint8 counter = 0;
@@ -36,6 +38,7 @@ contract Crowdfunding {
         }
         require(counter > 1, "did not get enough correct signatures");
         msg.sender.transfer(address(this).balance);
+        moneyClaimed = true;
     }
 
     function getRefund() public {
