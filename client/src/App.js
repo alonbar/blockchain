@@ -209,7 +209,10 @@ class App extends Component {
       axios.post('http://localhost:5000/startNewCampaign', data)
           .then(response =>
              console.log('response post: ', response));
-             this.refreshCampaignsList()   
+          setTimeout(function(f){
+            f();
+          }, 1000, this.refreshCampaignsList);
+             
 
     })
   }
