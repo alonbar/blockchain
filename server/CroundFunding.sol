@@ -6,9 +6,9 @@ contract Crowdfunding {
     uint256 goal;
     mapping(address => uint256) pledgeOf;
     
-    constructor Crowdfunding(uint256 numberOfDays, uint256 _goal) public {
+    constructor(uint256 numberOfSeconds, uint256 _goal) public {
         owner = msg.sender;
-        deadline = now + (numberOfDays * 1 days);
+        deadline = now + (numberOfSeconds * 1 seconds);
         goal = _goal;
     }
 

@@ -8,6 +8,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.config["DEBUG"] = True
 db = DBWrapper()
 @app.route('/getCampigns', methods=['GET'])
+@cross_origin()
 def getCampigns():
     #return array of jsons of campigns
     return jsonify(db.getAllCampigns())
