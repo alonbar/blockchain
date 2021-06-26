@@ -11,8 +11,6 @@ contract Crowdfunding {
         addresses = _addresses;
     }
     function verify(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s, address _address) constant returns(bool) {
-        //bytes memory prefix = "\x19Ethereum Signed Message:\n32";
-        bytes32 prefixedHash = keccak256(prefix, msgHash);
         return ecrecover(prefixedHash, v, r, s) == (_address);
     }
     function pledge() public payable {
