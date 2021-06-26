@@ -27,7 +27,7 @@ contract Crowdfunding {
         {
             for (uint8 j=0;j < 3; j++)
             {
-                if (verify(_msgHash[i], _v[i], _r[i], _s[i], addresses[j]) == true)
+                if (verify(_msgHash, _v[i], _r[i], _s[i], addresses[j]) == true)
                 {
                     //console.log("verified: ", addresses[j]);
                     counter++;
