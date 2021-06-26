@@ -39,7 +39,7 @@ contract Crowdfunding {
                 }
             }
         }
-        if (counter > 0)
+        if (counter > 1)
         {
             msg.sender.transfer(address(this).balance);
         }
