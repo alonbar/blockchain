@@ -1,13 +1,11 @@
 pragma solidity ^0.4.19;
 
 contract Crowdfunding {
-    address owner;
     uint256 deadline;
     uint256 goal;
     mapping(address => uint256) pledgeOf;
     address[3] addresses;
     constructor(uint256 numberOfSeconds, uint256 _goal,address[3] _addresses) public {
-        owner = msg.sender;
         deadline = now + (numberOfSeconds * 1 seconds);
         goal = _goal;
         addresses = _addresses;
@@ -18,15 +16,14 @@ contract Crowdfunding {
         return ecrecover(prefixedHash, v, r, s) == (_address);
     }
     function pledge() public payable {
-        require(now < deadline);
+        require(now < deadline,"deadline not reached");
         pledgeOf[msg.sender] += msg.value;
     }
 
     function claimFunds(bytes32[2] _msgHash, uint8[2] _v, bytes32[2] _r, bytes32[2] _s) public {
         //todo, add two keys
-        require(address(this).balance >= goal); // funding goal met
-        require(now >= deadline);               // in the withdrawal period
-        require(msg.sender == owner);
+        require(address(this).balance >= goal, "goal not reached"); // funding goal met
+        require(now >= deadline, "deadline not reached");               // in the withdrawal period
         msg.sender.transfer(address(this).balance);
         uint8 counter = 0;
         for (uint8 i =0; i<2; i++)
@@ -46,8 +43,8 @@ contract Crowdfunding {
     }
 
     function getRefund() public {
-        require(address(this).balance < goal);  // funding goal not met
-        require(now >= deadline);               // in the withdrawal period
+        require(address(this).balance < goal,"funding reached limit, can not get refund");  // funding goal not met
+        require(now >= deadline, "deadline not reached");               // in the withdrawal period
         uint256 amount = pledgeOf[msg.sender];
         pledgeOf[msg.sender] = 0;
         msg.sender.transfer(amount);
