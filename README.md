@@ -14,7 +14,7 @@ Installation and running:
 
 User guideline:
 
-1. Go to localhost:3001. You shouo
+1. Go to localhost:3001. 
 2. In order to launch a new campaign fill in the boxes under the title "start new campaign", give the campaign a new name, supply 3 adddresses for accoount that will be the owners of the campaign. Owners are the one that can then withdraw the campaign funds once the campign is successfully completed. Add a relative time in seconds for the campaign to end, and add the goal. 
 3. press the button: "publish campaign.". Metamask will ask you to confirm the deployment of the contract. A few seconds later (depends on the IDC testnet node) the new campaign will appear in the campaigns list.
 4. Once you have one campaign in your arsenal you can start donating it money by adding donation size and contract address under "Donate Money". After a successful donation you will see the balance of the contract right next to the text box. Just make sure you are signed in with the account you want to donate the money from.
