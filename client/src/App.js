@@ -205,7 +205,7 @@ class App extends Component {
       console.log('response deploy: ', response)
       console.log('response deploy address: ', response.options.address)
       console.log('here3') 
-      const data = { name: this.state.name, address: response.options.address, relativeTimeSeconds: this.state.relativeTimeSeconds };
+      const data = { name: this.state.name, address: response.options.address, relativeTimeSeconds: this.state.relativeTimeSeconds, endTime: Date.now() + 1000 * this.state.relativeTimeSeconds, goal: this.state.goal };
       axios.post('http://localhost:5000/startNewCampaign', data)
           .then(response =>
              console.log('response post: ', response));
@@ -224,7 +224,7 @@ class App extends Component {
         .then(campaigns => {
           console.log('campaigns data: ', campaigns)
           this.state.campaigns = campaigns.map((campaign, idx) => {
-            return <li key={idx}>name: {campaign.name}-----campagin address: {campaign.address}</li>;
+            return <li key={idx}>name: {campaign.name}-----campagin address: {campaign.address}-----campaign goal: {campaign.goal}-----end time: {new Date(campaign.endTime).toLocaleDateString() + ' ' + new Date(campaign.endTime).toLocaleTimeString()}</li>;
           });
       
           console.log('capmaigns: ', this.state.campaigns)
