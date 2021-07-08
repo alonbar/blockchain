@@ -25,6 +25,8 @@ contract Crowdfunding {
         require(address(this).balance >= goal, "goal not reached"); // funding goal met
         require(now >= deadline, "deadline not reached");               // in the withdrawal period
         uint8 counter = 0;
+
+        mapping (address => bool) usersSignatures;
         for (uint8 i =0; i<2; i++)
         {
             for (uint8 j=0;j < 3; j++)
@@ -32,11 +34,16 @@ contract Crowdfunding {
                 if (verify(_msgHash, _v[i], _r[i], _s[i], addresses[j]) == true)
                 {
                     //console.log("verified: ", addresses[j]);
-                    counter++;
+                    if (usersSignatures[addresses[j]] == false)
+                    {
+                        counter++;
+                        usersSignatures[addresses[j]] = true;
+                    }
+                    
                 }
             }
         }
-        require(counter > 1, "did not get enough correct signatures");
+        require(counter > 2, "did not get enough correct signatures");
         msg.sender.transfer(address(this).balance);
         moneyClaimed = true;
     }
